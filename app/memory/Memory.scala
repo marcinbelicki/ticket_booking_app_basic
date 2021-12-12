@@ -6,7 +6,6 @@ import java.util.{Calendar, Date, GregorianCalendar}
 import scala.collection.mutable
 
 object Memory extends Functions {
-
   val movies: mutable.Map[Int, Movie] = mutable.Map.empty[Int, Movie]
 
   val rooms: mutable.Map[Int, Room] = mutable.Map.empty[Int, Room]
@@ -30,8 +29,17 @@ object Memory extends Functions {
       .toList
   }
 
-  def groupAndSortByParameter[A, T](a: List[A],l: List[A => T], sep: String)(implicit ev$1: T => Ordered[T]): List[String] = {
+  def groupAndSortByParameter[A, T](a: List[A],l: List[A => T], sep: String, href: T => String )(implicit ev$1: T => Ordered[T]): List[String] = {
     l match {
+      case f::Nil =>
+        a
+          .groupBy(f)
+          .toList
+          .sortBy(_._1)
+          .map {
+            case (t: T, _) =>
+              s"$sep${href(t)}"
+          }
       case f::tail =>
         a
           .groupBy(f)
@@ -39,12 +47,12 @@ object Memory extends Functions {
           .sortBy(_._1)
           .map {
             case (t: T, b) =>
-              (s"$sep$t"::groupAndSortByParameter(b,tail,s"  $sep")).mkString("\n")
+              (s"$sep$t"::groupAndSortByParameter(b,tail,s"  $sep",href)).mkString("\n")
           }
-      case _ => Nil
     }
 
     }
 
+  println("a")
 
 }

@@ -28,7 +28,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    */
 
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok("views.html.index()")
+    Ok(views.html.index())
 
   }
 
@@ -44,12 +44,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
       val h: Screening => String = s => String.format("%02d", s.getDay(Calendar.DAY_OF_MONTH))
       val i: Screening => String = s => String.format("%02d", s.getDay(Calendar.HOUR_OF_DAY))
       val j: Screening => String = s => String.format("%02d", s.getDay(Calendar.MINUTE))
-      val b = groupAndSortByParameter(screeningsInInterval,List(k,f,g,h,i,j),"")
+      val href: String => String = s => s"<b>$s</a>"
 
 
-
-
-      Ok(b.mkString("\n"))
+      val b = groupAndSortByParameter(screeningsInInterval,List(k,f,g,h,i,j),"",href )
+      Ok(views.html.screenings(b.mkString("\n")))
 
     }
 
