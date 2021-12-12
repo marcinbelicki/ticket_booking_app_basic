@@ -18,11 +18,13 @@ class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle) {
 
   addRoomToMemory(None)
   addRoomToMemory(None)
+  addRoomToMemory(None)
 
   rooms(0).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,12).getTime)
   rooms(0).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13).getTime)
   rooms(1).addScreening(movies(1),new GregorianCalendar(2021,Calendar.DECEMBER,15,1,0x1).getTime)
   rooms(1).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0x1).getTime)
+  rooms(2).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13,0,0xF).getTime)
 
 
   println(movies)

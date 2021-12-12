@@ -4,8 +4,7 @@ import memory.Memory.screenings
 import memory.{Failure, OperationStatus, Success}
 
 import java.util.{Calendar, Date}
-
-class Screening (i: Int)(data: (Date, Movie, Room)) extends Removeable {
+class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   val (date,movie,room): (Date, Movie, Room)  = data
 
@@ -26,7 +25,7 @@ class Screening (i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   def isBetween(dateOne: Date, dateTwo: Date): Boolean = {
     val plusFifteen: Calendar = Calendar.getInstance()
-        plusFifteen.add(Calendar.MINUTE,15)
+    plusFifteen.add(Calendar.MINUTE,15)
     val a = List(
       plusFifteen.getTime,
       dateOne,
@@ -50,9 +49,9 @@ class Screening (i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   def checkColision(startThat: Date,endThat: Date): Boolean = {
     List(startThat,
-          endThat,
-          start,
-          end
+      endThat,
+      start,
+      end
     ).zipWithIndex
       .sortBy(_._1)
       .map(_._2)
@@ -69,6 +68,7 @@ class Screening (i: Int)(data: (Date, Movie, Room)) extends Removeable {
   }
 
 }
+
 
 object Screening {
   def apply(id: Int)(data: (Date, Movie, Room)) = new Screening(id)(data)

@@ -1,7 +1,35 @@
-.a1{
-    margin-left: 50px;
+:root {
+  --margin: 15px;
 }
 
-.a2{
-    margin-left: 100px;
+._0{
+    margin-left: calc(var(--margin)*0);
+}
+
+._1{
+    margin-left: calc(var(--margin)*1);
+}
+._2{
+    margin-left: calc(var(--margin)*2);
+}
+
+._3{
+    margin-left: calc(var(--margin)*3);
+}
+
+._4{
+    margin-left: calc(var(--margin)*4);
+}
+
+._5{
+    margin-left: calc(var(--margin)*5);
+}
+
+a {
+  color: #808080;
+}
+
+body {
+    background-color: black;
+    color: 	#808080;
 }

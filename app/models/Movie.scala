@@ -48,6 +48,7 @@ class Movie(i: Int)(data: (String,Int)) extends Removeable {
 
 object Movie {
   def apply(id: Int)(data:  (String,Int)) = new Movie(id)(data)
+
 }
 
 

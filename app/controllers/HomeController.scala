@@ -1,6 +1,6 @@
 package controllers
 
-import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter, screenings}
+import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter, groupAndSortByParameter1, screenings}
 import models.Screening
 
 import javax.inject._
@@ -46,9 +46,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
       val j: Screening => String = s => String.format("%02d", s.getDay(Calendar.MINUTE))
       val href: String => String = s => s"<b>$s</a>"
 
+      val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,href )
 
+      println(c)
       val b = groupAndSortByParameter(screeningsInInterval,List(k,f,g,h,i,j),"",href )
-      Ok(views.html.screenings(b.mkString("\n")))
+      Ok(views.html.screenings(c))
 
     }
 

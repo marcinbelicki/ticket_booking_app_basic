@@ -2,6 +2,7 @@ package memory
 
 import models.{Movie, Room, Screening}
 
+
 import java.util.{Calendar, Date, GregorianCalendar}
 import scala.collection.mutable
 
@@ -52,6 +53,30 @@ object Memory extends Functions {
     }
 
     }
+
+  def groupAndSortByParameter1[A, T](a: List[A],l: List[A => T], sep: Int, href: T => String )(implicit ev$1: T => Ordered[T]): List[(Int,T)] = {
+    l match {
+      case f::Nil =>
+        a
+          .groupBy(f)
+          .toList
+          .sortBy(_._1)
+          .map {
+            case (t: T, _) =>
+              (sep,t)
+          }
+      case f::tail =>
+        a
+          .groupBy(f)
+          .toList
+          .sortBy(_._1)
+          .flatMap {
+            case (t: T, b) =>
+              (sep,t)::groupAndSortByParameter1(b,tail,sep+1,href)
+          }
+    }
+
+  }
 
   println("a")
 
