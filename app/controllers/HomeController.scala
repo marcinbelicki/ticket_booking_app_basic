@@ -1,16 +1,12 @@
 package controllers
 
-import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter, groupAndSortByParameter1, screenings}
+import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter1}
 import models.Screening
-
-import javax.inject._
-import play.api._
 import play.api.mvc._
 
-import java.io.File
 import java.net.URLDecoder
-import java.nio.charset.{Charset, StandardCharsets}
 import java.util.{Calendar, GregorianCalendar}
+import javax.inject._
 
 
 /**
@@ -27,12 +23,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
 
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
-
   }
 
-  def timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int) =
+  def timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val from = new GregorianCalendar(year1, month1 - 1, day1, hour1, minutes1).getTime
       val to = new GregorianCalendar(year2, month2 - 1, day2, hour2, minutes2).getTime
@@ -48,13 +43,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
       val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,href )
 
-      println(c)
-      val b = groupAndSortByParameter(screeningsInInterval,List(k,f,g,h,i,j),"",href )
       Ok(views.html.screenings(c))
 
     }
 
-  def getString(string: String) = Action { implicit request: Request[AnyContent] =>
+  def getString(string: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val converted = URLDecoder.decode(string,"UTF-8")
 
 
