@@ -15,8 +15,9 @@ class SeatRow(i: Int, s: Array[Seat]){
       case Some(seat) => seat.getStatus match {
         case Available =>
           seat.setTaken()
-          List(id + 2,id - 2).foreach(i => liftedSeats(i).foreach(_.setUnavailable()))
-          List(id + 1,id - 1).foreach(i => liftedSeats(i).foreach(_.setAvailable()))
+          val f: List[Int] => (Seat => Any) => Unit = l => g => l.foreach(i => liftedSeats(i).foreach(g))
+          f(List(id + 2,id - 2))(_.setUnavailable())
+          f(List(id + 1,id - 1))(_.setAvailable())
           Success("Seat was successfully reserved")
         case Taken =>
           Failure("Seat already taken")
