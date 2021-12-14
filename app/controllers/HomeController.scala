@@ -1,6 +1,6 @@
 package controllers
 
-import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter1}
+import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter1, screenings}
 import models.Screening
 import play.api.mvc._
 
@@ -39,13 +39,20 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
       val h: Screening => String = s => String.format("%02d", s.getDay(Calendar.DAY_OF_MONTH))
       val i: Screening => String = s => String.format("%02d", s.getDay(Calendar.HOUR_OF_DAY))
       val j: Screening => String = s => String.format("%02d", s.getDay(Calendar.MINUTE))
-      val href: String => String = s => s"<b>$s</a>"
+      val l: Screening => Int = _.id
 
-      val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,href )
+      val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,g = l)
 
       Ok(views.html.screenings(c))
 
     }
+
+  def getScreening(id: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    val a = screenings.get(id)
+
+    Ok(a.toString)
+
+  }
 
   def getString(string: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val converted = URLDecoder.decode(string,"UTF-8")

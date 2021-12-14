@@ -8,12 +8,13 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   val (date,movie,room): (Date, Movie, Room)  = data
 
-  private val id = i
+  val id: Int = i
 
   private val start: Date = date
 
   private val end: Date = movie.movieEnds(start)
 
+  private val seats = room.copySeats
 
 
 
@@ -38,8 +39,6 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
       .drop(2)
       .head
       .equals(2)
-
-    println(screenings)
     a
   }
 

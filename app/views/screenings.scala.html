@@ -1,4 +1,4 @@
-@(list: List[(Int,String)])
+@(list: List[(Int,String,Option[Int])])
 
 @main("Screenings") {
 <div class="_0">title</div>
@@ -12,8 +12,8 @@
 
 @list.map{ a =>
     <div class="_@a._1">
-        @if(a._1==5){
-            <a href="/a">@a._2</a>
+        @if(a._3.isDefined){
+            <a href="/reserveScreening/@a._3.get">@a._2</a>
         } else {
             @a._2
         }

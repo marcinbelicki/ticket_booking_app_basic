@@ -24,11 +24,12 @@ class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle) {
   rooms(0).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13).getTime)
   rooms(1).addScreening(movies(1),new GregorianCalendar(2021,Calendar.DECEMBER,15,1,0x1).getTime)
   rooms(1).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0x1).getTime)
-  rooms(2).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13,0,0xF).getTime)
+  rooms(0).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0).getTime)
+  rooms(2).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13,0,2).getTime)
 
-
-  println(movies)
-  println("AAAAAA")
+//
+//  println(movies)
+//  println("AAAAAA")
  lifecycle.addStopHook { () =>
     Future.successful(())
   }

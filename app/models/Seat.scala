@@ -1,7 +1,8 @@
 package models
 
-class Seat {
+class Seat(i: Int) {
 
+  private val id = i
   private var status: SeatStatus = Available
 
   def getStatus: SeatStatus = {

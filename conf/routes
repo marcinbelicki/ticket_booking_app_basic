@@ -10,6 +10,7 @@ GET     /                           controllers.HomeController.index()
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 
-GET     /getstring/*string          controllers.HomeController.getString(string: String)
+GET     /reserveScreening/*id         controllers.HomeController.getScreening(id: Int)
+
 
 GET     /timeinterval/firstdate/:year1/:month1/:day1/:hour1/:minutes1/lastdate/:year2/:month2/:day2/:hour2/:minutes2     controllers.HomeController.timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int)

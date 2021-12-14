@@ -30,40 +30,17 @@ object Memory extends Functions {
       .toList
   }
 
-  def groupAndSortByParameter[A, T](a: List[A],l: List[A => T], sep: String, href: T => String )(implicit ev$1: T => Ordered[T]): List[String] = {
+
+
+  def groupAndSortByParameter1[A, T](a: List[A],l: List[A => T], sep: Int,g: A => Int)(implicit ev$1: T => Ordered[T]): List[(Int,T,Option[Int])] = {
     l match {
       case f::Nil =>
         a
-          .groupBy(f)
-          .toList
+          .map(s => (f(s),s))
           .sortBy(_._1)
           .map {
-            case (t: T, _) =>
-              s"$sep${href(t)}"
-          }
-      case f::tail =>
-        a
-          .groupBy(f)
-          .toList
-          .sortBy(_._1)
-          .map {
-            case (t: T, b) =>
-              (s"$sep$t"::groupAndSortByParameter(b,tail,s"  $sep",href)).mkString("\n")
-          }
-    }
-
-    }
-
-  def groupAndSortByParameter1[A, T](a: List[A],l: List[A => T], sep: Int, href: T => String )(implicit ev$1: T => Ordered[T]): List[(Int,T)] = {
-    l match {
-      case f::Nil =>
-        a
-          .groupBy(f)
-          .toList
-          .sortBy(_._1)
-          .map {
-            case (t: T, _) =>
-              (sep,t)
+            case (t: T, head: A) =>
+              (sep,t,Some(g(head)))
           }
       case f::tail =>
         a
@@ -72,7 +49,7 @@ object Memory extends Functions {
           .sortBy(_._1)
           .flatMap {
             case (t: T, b) =>
-              (sep,t)::groupAndSortByParameter1(b,tail,sep+1,href)
+              (sep,t,None)::groupAndSortByParameter1(b,tail,sep+1,g)
           }
     }
 
