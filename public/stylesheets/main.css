@@ -25,8 +25,35 @@
     margin-left: calc(var(--margin)*5);
 }
 
+.seat{
+    float: left;
+    width: 36px;
+}
+
+.number {
+    float: left;
+    width: 13px;
+}
+
+
+.taken {
+    color: red;
+}
+
+.available {
+    color: green;
+}
+
+.unavailable {
+    color: #808080;
+}
+
 a {
   color: #808080;
+}
+
+a:hover {
+  color: orange;
 }
 
 body {

@@ -1,9 +1,10 @@
 package models
 
 import memory.Memory.screenings
-import memory.{Failure, OperationStatus, Success}
+import memory.{Failure, OperationStatus}
 
 import java.util.{Calendar, Date}
+import scala.math.Ordered.orderingToOrdered
 class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   val (date,movie,room): (Date, Movie, Room)  = data
@@ -14,7 +15,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   private val end: Date = movie.movieEnds(start)
 
-  private val seats = room.copySeats
+  val seats: Array[SeatRow] = room.copySeats
 
 
 
@@ -24,22 +25,23 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
 
 
+  def  plusFifteen: Boolean = {
+    val cal: Calendar = Calendar.getInstance()
+    cal.add(Calendar.MINUTE,15)
+    date >= cal.getTime
+  }
+
   def isBetween(dateOne: Date, dateTwo: Date): Boolean = {
-    val plusFifteen: Calendar = Calendar.getInstance()
-    plusFifteen.add(Calendar.MINUTE,15)
-    val a = List(
-      plusFifteen.getTime,
+    plusFifteen && List(
       dateOne,
       date,
       dateTwo
     )
       .zipWithIndex
       .sortBy(_._1)
-      .map(_._2)
-      .drop(2)
-      .head
-      .equals(2)
-    a
+      .apply(1)
+      ._2
+      .equals(1)
   }
 
   def remove: OperationStatus = {
@@ -64,6 +66,16 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
     val cal: Calendar = Calendar.getInstance()
     cal.setTime(date)
     cal.get(field)
+  }
+
+  def reserveSeat(rowId: Int, seatId: Int): OperationStatus = {
+    seats.lift(rowId) match {
+      case Some(row) =>
+        row.reserveSeat(seatId)
+      case None =>
+        Failure("Seat doesn't exist")
+    }
+
   }
 
 }

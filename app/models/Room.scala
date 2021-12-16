@@ -18,15 +18,15 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
   }
 
 
-  private val row: Array[Seat] = Range(0,10).toArray.map(new Seat(_))
 
-  private val seats: Array[SeatRow] = Range(0,10).toArray.map(new SeatRow(_,row.clone()))
+
+  private val seats: Array[SeatRow] = Range(0,10).toArray.map(new SeatRow(_,Range(0,10).toArray.map(new Seat(_)).clone()))
 
 
   private val TheRoom = this
 
   def copySeats: Array[SeatRow] = {
-    seats.clone()
+    seats.map(_.copy)
   }
 
 

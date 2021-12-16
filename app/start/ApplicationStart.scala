@@ -19,17 +19,23 @@ class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle) {
   addRoomToMemory(None)
   addRoomToMemory(None)
   addRoomToMemory(None)
-
-  rooms(0).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,12).getTime)
-  rooms(0).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13).getTime)
+  addRoomToMemory(None)
+  val a = new GregorianCalendar()
+  a.add(Calendar.YEAR,1)
+  rooms(0).addScreening(movies(0),a.getTime)
+  a.add(Calendar.MINUTE,5)
+  rooms(1).addScreening(movies(0),a.getTime)
+  a.add(Calendar.MINUTE,10)
+  rooms(2).addScreening(movies(0),a.getTime)
+  a.add(Calendar.MINUTE,10)
+  rooms(3).addScreening(movies(1),a.getTime)
+  a.add(Calendar.HOUR,10)
+  rooms(3).addScreening(movies(1),a.getTime)
   rooms(1).addScreening(movies(1),new GregorianCalendar(2021,Calendar.DECEMBER,15,1,0x1).getTime)
   rooms(1).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0x1).getTime)
   rooms(0).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0).getTime)
   rooms(2).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13,0,2).getTime)
 
-//
-//  println(movies)
-//  println("AAAAAA")
  lifecycle.addStopHook { () =>
     Future.successful(())
   }

@@ -1,0 +1,19 @@
+@(screening: Screening)
+
+@main("Reserve Screening") {
+
+    @screening.movie.title <br>
+    @screening.room <br>
+    @screening.date <br>
+---------------------------SCREEN---------------------------<br>
+    @screening.seats.map{ row =>
+        @row.seats.map {seat =>
+            <a href="@routes.HomeController.reserveSeat(screening.id,row.id,seat.id)"  >
+                <div class="seat @seat.getStatus">
+                    <div class="number">@row.char</div>
+                    <div class="number">@seat</div>
+                </div>
+            </a>
+}<br>
+    }
+}

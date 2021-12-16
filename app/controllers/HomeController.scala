@@ -41,28 +41,30 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
       val j: Screening => String = s => String.format("%02d", s.getDay(Calendar.MINUTE))
       val l: Screening => Int = _.id
 
-      val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,g = l)
+      val c = groupAndSortByParameter1(screeningsInInterval,List(k,f,g,h,i,j),0,l)
 
       Ok(views.html.screenings(c))
 
     }
 
   def getScreening(id: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val a = screenings.get(id)
-
-    Ok(a.toString)
-
+    screenings.filter(_._2.plusFifteen).get(id) match {
+      case Some(screening) => Ok(views.html.reservescreening(screening))
+      case None => Ok("Screening Unavailable")
+    }
   }
 
-  def getString(string: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val converted = URLDecoder.decode(string,"UTF-8")
 
-
-    converted.foreach(println)
-
-    Ok(converted)
-
+  def reserveSeat(screeningId: Int, rowId: Int, seatId: Int ): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    screenings.filter(_._2.plusFifteen).get(screeningId) match {
+      case Some(screening) =>
+        screening.reserveSeat(rowId,seatId)
+        Redirect(routes.HomeController.getScreening(screeningId))
+      case None => Ok("Screening Unavailable")
+    }
   }
+
+
 
 
 }

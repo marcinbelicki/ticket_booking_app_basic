@@ -4,7 +4,7 @@ trait SeatStatus {
   override def toString: String = this match {
     case Taken => "taken"
     case Available => "available"
-    case Taken => "taken"
+    case Unavailable => "unavailable"
   }
 }
 

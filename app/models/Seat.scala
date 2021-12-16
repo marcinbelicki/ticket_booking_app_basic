@@ -2,8 +2,11 @@ package models
 
 class Seat(i: Int) {
 
-  private val id = i
+  val id: Int = i
   private var status: SeatStatus = Available
+
+  def copy = new Seat(id)
+  override def toString: String = s"$id"
 
   def getStatus: SeatStatus = {
     status

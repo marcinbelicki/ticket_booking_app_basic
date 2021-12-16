@@ -2,10 +2,7 @@ package memory
 
 
 
-import memory.Memory.screenings
-import models.Screening
 
-import java.util.Date
 import scala.annotation.tailrec
 import scala.collection.mutable
 
