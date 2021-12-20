@@ -25,8 +25,8 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
 
   private val TheRoom = this
 
-  def copySeats: Array[SeatRow] = {
-    seats.map(_.copy)
+  def copySeats(screening: Screening): Array[SeatRow] = {
+    seats.map(_.copy(screening))
   }
 
 

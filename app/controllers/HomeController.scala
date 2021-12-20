@@ -1,6 +1,7 @@
 package controllers
 
-import memory.Memory.{getScreeningsInInterval, groupAndSortByParameter1, screenings}
+import memory.Memory.{addOrderToMemory, getScreeningsInInterval, groupAndSortByParameter1, orders, screenings}
+import memory.Success
 import models.Screening
 import play.api.mvc._
 
@@ -49,7 +50,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
   def getScreening(id: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     screenings.filter(_._2.plusFifteen).get(id) match {
-      case Some(screening) => Ok(views.html.reservescreening(screening))
+      case Some(screening) =>
+
+        Ok(views.html.reservescreening(screening,request.session.get("orderid").map(_.toInt).flatMap(orders.get)))
       case None => Ok("Screening Unavailable")
     }
   }
@@ -58,8 +61,32 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def reserveSeat(screeningId: Int, rowId: Int, seatId: Int ): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     screenings.filter(_._2.plusFifteen).get(screeningId) match {
       case Some(screening) =>
-        screening.reserveSeat(rowId,seatId)
-        Redirect(routes.HomeController.getScreening(screeningId))
+
+        request.session.get("orderid") match {
+          case Some(id) =>
+            orders.get(id.toInt) match {
+              case Some(_) =>
+                screening.reserveSeat(rowId,seatId,id.toInt)
+                Redirect(routes.HomeController.getScreening(screeningId))
+              case None =>
+                addOrderToMemory()  match {
+                  case Success(id: Int) =>
+                    addOrderToMemory()
+                    screening.reserveSeat(rowId,seatId,id)
+                    Redirect(routes.HomeController.getScreening(screeningId)).withSession("orderid" -> id.toString)
+                  case _ => Ok("Error - couldnt add order to memory")
+                }
+            }
+
+          case None =>
+            addOrderToMemory() match {
+              case Success(id: Int) =>
+                addOrderToMemory()
+                screening.reserveSeat(rowId,seatId,id)
+                Redirect(routes.HomeController.getScreening(screeningId)).withSession("orderid" -> id.toString)
+              case _ => Ok("Error - couldnt add order to memory")
+            }
+        }
       case None => Ok("Screening Unavailable")
     }
   }

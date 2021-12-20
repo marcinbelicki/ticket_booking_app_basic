@@ -1,38 +1,35 @@
 package models
 
-class Seat(i: Int) {
+class Seat(i: Int, sR: Option[SeatRow] = None) {
 
   val id: Int = i
   private var status: SeatStatus = Available
 
-  def copy = new Seat(id)
+  val thisSeatRow: Option[SeatRow] = sR
+
+  def copy(seatRow:  Option[SeatRow]): Seat = seatRow match {
+    case Some(_) => new Seat(id,seatRow)
+    case None => new Seat(id,thisSeatRow)
+
+  }
   override def toString: String = s"$id"
 
   def getStatus: SeatStatus = {
     status
   }
 
+
+  def setReserved(order: Order,id: Int): Unit = {
+    status = Reserved(order,id)
+  }
   def setTaken(): Unit = {
     status = Taken
   }
 
-  def setUnavailable(): Unit = {
-    status match {
-      case Available => status = Unavailable
-      case _ => ()
-    }
-  }
-
-  def setAvailable(): Unit = {
-    status match {
-      case Unavailable => status = Available
-      case _ => ()
-    }
-  }
 
   def setFree(): Unit = {
     status match {
-      case Taken => status = Available
+      case Taken | Reserved(_,_) => status = Available
       case _ => ()
     }
   }

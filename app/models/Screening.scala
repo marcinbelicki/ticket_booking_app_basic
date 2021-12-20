@@ -1,6 +1,6 @@
 package models
 
-import memory.Memory.screenings
+import memory.Memory.{orders, screenings}
 import memory.{Failure, OperationStatus}
 
 import java.util.{Calendar, Date}
@@ -15,7 +15,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
   private val end: Date = movie.movieEnds(start)
 
-  val seats: Array[SeatRow] = room.copySeats
+  val seats: Array[SeatRow] = room.copySeats(this)
 
 
 
@@ -68,14 +68,18 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
     cal.get(field)
   }
 
-  def reserveSeat(rowId: Int, seatId: Int): OperationStatus = {
+  def reserveSeat(rowId: Int, seatId: Int, orderId: Int): OperationStatus = {
     seats.lift(rowId) match {
       case Some(row) =>
-        row.reserveSeat(seatId)
+        orders.get(orderId) match {
+          case Some(order) =>
+            row.reserveSeat(seatId,order)
+          case _ =>
+            Failure("Seat doesn't exist")
+        }
       case None =>
         Failure("Seat doesn't exist")
     }
-
   }
 
 }

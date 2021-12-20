@@ -1,4 +1,4 @@
-@(screening: Screening)
+@(screening: Screening,order: Option[Order])
 
 @main("Reserve Screening") {
 
@@ -9,11 +9,23 @@
     @screening.seats.map{ row =>
         @row.seats.map {seat =>
             <a href="@routes.HomeController.reserveSeat(screening.id,row.id,seat.id)"  >
-                <div class="seat @seat.getStatus">
+                <div class="seat @seat.getStatus.toClass(order)">
                     <div class="number">@row.char</div>
                     <div class="number">@seat</div>
                 </div>
             </a>
-}<br>
+        }<br>
+    }
+
+    @order.map { o =>
+        @o.seats.headOption.map { _ =>
+            <a href="/finalize">Finalize your order</a><br>
+        }
+        @o.seats.map {seat =>
+            <div class="seat">
+                <div class="number">@seat._2.thisSeatRow.map{row => @row.char}</div>
+                <div class="number">@seat._2</div>
+            </div><br>
+        }
     }
 }

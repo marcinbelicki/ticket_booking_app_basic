@@ -44,8 +44,8 @@
     color: green;
 }
 
-.unavailable {
-    color: #808080;
+.reserved {
+    color: blue;
 }
 
 a {
