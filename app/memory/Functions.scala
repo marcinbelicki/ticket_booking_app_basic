@@ -8,7 +8,7 @@ import scala.collection.mutable
 
 trait Functions  {
 
-  protected def addThing[A, B](map: mutable.Map[Int, B])(f: Int => A => B)(a: A): OperationStatus = {
+  protected def addThing[A, B](map: mutable.Map[Int, B])(f: Int => A => B)(a: A): OperationStatus[Int] = {
     @tailrec
     def Helper(id: Int): Int = {
       map.get(id) match {

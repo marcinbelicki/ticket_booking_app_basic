@@ -26,7 +26,7 @@ class Movie(i: Int)(data: (String,Int)) extends Removeable {
     calendar.getTime
   }
 
-  def remove: OperationStatus ={
+  def remove: OperationStatus[String] ={
     val messageFromScreenings = screenings.filter{
       case _ -> screening if screening.movie == this => true
       case _ => false

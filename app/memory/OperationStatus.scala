@@ -1,8 +1,15 @@
 package memory
 
-trait OperationStatus
+abstract class OperationStatus[A](mess: A) {
+  val message: A = mess
+
+  def toAny: OperationStatus[Any] = this match {
+    case Success(_) => Success[Any](message)
+    case Failure(_) => Failure[Any](message)
+  }
+}
 
 
-case class Success(message: Any) extends OperationStatus
+case class Success[A]( override val message: A) extends OperationStatus[A](message)
 
-case class Failure(message: String) extends OperationStatus
+case class Failure[A]( override val message: A) extends OperationStatus[A](message)

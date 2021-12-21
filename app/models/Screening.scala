@@ -44,7 +44,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
       .equals(1)
   }
 
-  def remove: OperationStatus = {
+  def remove: OperationStatus[String] = {
     removeThing(screenings)(id)
   }
 
@@ -68,7 +68,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
     cal.get(field)
   }
 
-  def reserveSeat(rowId: Int, seatId: Int, orderId: Int): OperationStatus = {
+  def reserveSeat(rowId: Int, seatId: Int, orderId: Int): OperationStatus[String] = {
     seats.lift(rowId) match {
       case Some(row) =>
         orders.get(orderId) match {

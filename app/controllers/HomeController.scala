@@ -57,6 +57,18 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     }
   }
 
+  def finalizeOrder(screeningId: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    request.session.get("orderid") match {
+      case Some(id) =>
+        val idInt = id.toInt
+        orders.get(idInt) match {
+          case Some(order) => Ok(views.html.screeningFinalization(order))
+          case None => Redirect(routes.HomeController.getScreening(screeningId))
+        }
+      case None => Redirect(routes.HomeController.getScreening(screeningId))
+    }
+  }
+
 
   def reserveSeat(screeningId: Int, rowId: Int, seatId: Int ): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     screenings.filter(_._2.plusFifteen).get(screeningId) match {
@@ -64,9 +76,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
         request.session.get("orderid") match {
           case Some(id) =>
-            orders.get(id.toInt) match {
+            val idInt = id.toInt
+            orders.get(idInt) match {
               case Some(_) =>
-                screening.reserveSeat(rowId,seatId,id.toInt)
+                screening.reserveSeat(rowId,seatId,idInt)
                 Redirect(routes.HomeController.getScreening(screeningId))
               case None =>
                 addOrderToMemory()  match {

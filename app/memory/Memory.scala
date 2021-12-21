@@ -2,7 +2,7 @@ package memory
 
 import models.{Movie, Order, Room, Screening}
 
-import java.util.{Calendar, Date, GregorianCalendar}
+import java.util.Date
 import scala.collection.mutable
 
 object Memory extends Functions {
@@ -15,13 +15,13 @@ object Memory extends Functions {
   val orders: mutable.Map[Int, Order] = mutable.Map.empty[Int, Order]
 
 
-  val addScreeningToMemory: ((Date, Movie, Room)) => OperationStatus = addThing(screenings)(Screening.apply)
+  val addScreeningToMemory: ((Date, Movie, Room)) => OperationStatus[Int] = addThing(screenings)(Screening.apply)
 
-  val addRoomToMemory: Option[String] => OperationStatus = addThing(rooms)(Room.apply)
+  val addRoomToMemory: Option[String] => OperationStatus[Int] = addThing(rooms)(Room.apply)
 
-  val addMovieToMemory: ((String,Int)) => OperationStatus = addThing(movies)(Movie.apply)
+  val addMovieToMemory: ((String,Int)) => OperationStatus[Int] = addThing(movies)(Movie.apply)
 
-  val addOrderToMemory: Unit => OperationStatus = addThing(orders)(Order.apply)
+  val addOrderToMemory: Unit => OperationStatus[Int] = addThing(orders)(Order.apply)
 
   def getScreeningsInInterval(dateOne: Date, dateTwo: Date): List[Screening] = {
     screenings

@@ -6,7 +6,7 @@ import scala.collection.mutable
 
 trait Removeable {
 
-  protected def removeThing[A](map: mutable.Map[Int, A])(id: Int): OperationStatus = {
+  protected def removeThing[A](map: mutable.Map[Int, A])(id: Int): OperationStatus[String] = {
     map.get(id) match {
       case Some(a) =>
         map -= id

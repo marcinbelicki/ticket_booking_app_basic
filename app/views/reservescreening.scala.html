@@ -19,7 +19,7 @@
 
     @order.map { o =>
         @o.seats.headOption.map { _ =>
-            <a href="/finalize">Finalize your order</a><br>
+            <a href="@routes.HomeController.finalizeOrder(screening.id)">Finalize your order</a><br>
         }
         @o.seats.map {seat =>
             <div class="seat">

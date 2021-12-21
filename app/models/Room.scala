@@ -32,7 +32,7 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
 
 
 
-  def addScreening(movie: Movie, date: Date): OperationStatus = {
+  def addScreening(movie: Movie, date: Date): OperationStatus[Any] = {
     val end = movie.movieEnds(date)
     screenings.filter {
       case _ -> screening if screening.room == TheRoom & !screening.checkColision(date,end) => true
@@ -42,13 +42,13 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
       .toList
     match {
       case Nil =>
-        addScreeningToMemory(date,movie,TheRoom)
+        addScreeningToMemory(date,movie,TheRoom).toAny
       case a =>
         Failure(s"Screening has collision with:\n${a.mkString("\n")}")
     }
   }
 
-  def remove: OperationStatus ={
+  def remove: OperationStatus[String] ={
     val messageFromScreenings = screenings.filter{
       case _ -> screening if screening.room == TheRoom => true
       case _ => false

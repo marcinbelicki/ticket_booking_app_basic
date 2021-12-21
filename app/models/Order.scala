@@ -8,7 +8,7 @@ class  Order(i: Int) extends Functions{
   val id = i
   val seats: mutable.Map[Int, Seat] = mutable.Map.empty
 
-  val addSeat: Seat => OperationStatus = addThing(seats)((_ => b => b): Int => Seat => Seat)
+  val addSeat: Seat => OperationStatus[Int] = addThing(seats)((_ => b => b): Int => Seat => Seat)
 
 
   def removeSeat(id: Int): Unit =seats-=id
