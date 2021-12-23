@@ -1,7 +1,7 @@
 package models
 
 import memory.Memory.{orders, screenings}
-import memory.{Failure, OperationStatus}
+import memory.{Failure, OperationStatus, Success}
 
 import java.util.{Calendar, Date}
 import scala.math.Ordered.orderingToOrdered
@@ -79,6 +79,19 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
         }
       case None =>
         Failure("Seat doesn't exist")
+    }
+  }
+
+  def checkCondition(order: Order): OperationStatus[List[Seat]] = {
+    seats
+      .map(_.checkCondition(order))
+      .flatMap {
+        case Failure(l) => l
+        case _ => Nil
+      }
+      .toList match {
+      case Nil => Success(Nil)
+      case list => Failure(list)
     }
   }
 

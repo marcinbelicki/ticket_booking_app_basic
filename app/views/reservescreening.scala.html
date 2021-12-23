@@ -1,6 +1,9 @@
-@(screening: Screening,order: Option[Order])
+@(screening: Screening,order: Option[Order],errorMessage: List[String] = Nil)
 
 @main("Reserve Screening") {
+    @errorMessage.map{message =>
+        @message <br>
+    }
 
     @screening.movie.title <br>
     @screening.room <br>
@@ -11,7 +14,7 @@
             <a href="@routes.HomeController.reserveSeat(screening.id,row.id,seat.id)"  >
                 <div class="seat @seat.getStatus.toClass(order)">
                     <div class="number">@row.char</div>
-                    <div class="number">@seat</div>
+                    <div class="number">@seat.id</div>
                 </div>
             </a>
         }<br>
@@ -24,7 +27,7 @@
         @o.seats.map {seat =>
             <div class="seat">
                 <div class="number">@seat._2.thisSeatRow.map{row => @row.char}</div>
-                <div class="number">@seat._2</div>
+                <div class="number">@seat._2.id</div>
             </div><br>
         }
     }

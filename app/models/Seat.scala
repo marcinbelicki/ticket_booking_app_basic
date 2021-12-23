@@ -10,9 +10,8 @@ class Seat(i: Int, sR: Option[SeatRow] = None) {
   def copy(seatRow:  Option[SeatRow]): Seat = seatRow match {
     case Some(_) => new Seat(id,seatRow)
     case None => new Seat(id,thisSeatRow)
-
   }
-  override def toString: String = s"$id"
+  override def toString: String = s"${thisSeatRow.map(_.char).getOrElse(" ")} $id"
 
   def getStatus: SeatStatus = {
     status

@@ -1,6 +1,6 @@
-@(order: Order)
+@(order: Map[Screening,List[Seat]])
 
 @main("Order Finalizing") {
 
-    @order.seats
+    @order
 }

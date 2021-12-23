@@ -1,13 +1,15 @@
 package controllers
 
 import memory.Memory.{addOrderToMemory, getScreeningsInInterval, groupAndSortByParameter1, orders, screenings}
-import memory.Success
-import models.Screening
+import memory.{Failure, Success}
+import models.{Screening, Seat}
 import play.api.mvc._
 
 import java.net.URLDecoder
 import java.util.{Calendar, GregorianCalendar}
 import javax.inject._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 /**
@@ -48,24 +50,41 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
     }
 
-  def getScreening(id: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def getScreening(id: Int,error: List[String] = Nil): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     screenings.filter(_._2.plusFifteen).get(id) match {
       case Some(screening) =>
 
-        Ok(views.html.reservescreening(screening,request.session.get("orderid").map(_.toInt).flatMap(orders.get)))
+        Ok(views.html.reservescreening(screening,request.session.get("orderid").map(_.toInt).flatMap(orders.get),error))
       case None => Ok("Screening Unavailable")
     }
   }
 
-  def finalizeOrder(screeningId: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def finalizeOrder(screeningId: Int): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     request.session.get("orderid") match {
       case Some(id) =>
         val idInt = id.toInt
         orders.get(idInt) match {
-          case Some(order) => Ok(views.html.screeningFinalization(order))
-          case None => Redirect(routes.HomeController.getScreening(screeningId))
+          case Some(order) =>
+            val orderSeats = order.finalizeOrder
+            orderSeats.filter {
+              case (_,(_,Failure(_)))  => true
+              case _ => false
+            }.toList match {
+              case Nil =>
+                Future(Ok(views.html.screeningFinalization(orderSeats.map{
+                  case (screening,(_,Success(list: List[Seat]))) =>
+                    screening -> list
+                })))
+              case list=>
+                val string = list.flatMap {
+                  case (screening,(_,Failure(list: List[Seat]))) =>
+                    s"There was a problem with screening $screening - following seats cannot be left (as long as they're between two reserved seats)"::list.map(_.toString)
+                }
+                getScreening(screeningId,string).apply(request)
+            }
+          case None => getScreening(screeningId,List("error")).apply(request)
         }
-      case None => Redirect(routes.HomeController.getScreening(screeningId))
+      case None => getScreening(screeningId,List("error")).apply(request)
     }
   }
 
