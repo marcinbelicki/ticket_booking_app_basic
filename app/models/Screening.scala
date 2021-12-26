@@ -3,6 +3,7 @@ package models
 import memory.Memory.{orders, screenings}
 import memory.{Failure, OperationStatus, Success}
 
+import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 import scala.math.Ordered.orderingToOrdered
 class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
@@ -18,9 +19,11 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
   val seats: Array[SeatRow] = room.copySeats(this)
 
 
+  private val dateformat = new SimpleDateFormat("YYYY-MM-dd HH:mm")
 
+  val formattedDate: String = dateformat.format(date)
   override def toString: String = {
-    s"Screening: $room, $movie, $date"
+    s"Screening: $movie, $room, ${formattedDate}"
   }
 
 

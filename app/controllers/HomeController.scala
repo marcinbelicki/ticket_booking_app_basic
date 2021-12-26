@@ -1,7 +1,7 @@
 package controllers
 
 import memory.Memory.{addOrderToMemory, getScreeningsInInterval, groupAndSortByParameter1, orders, screenings}
-import memory.{Failure, Success}
+import memory.{Failure, OperationStatus, Success}
 import models.{Screening, Seat}
 import play.api.mvc._
 
@@ -10,6 +10,7 @@ import java.util.{Calendar, GregorianCalendar}
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.matching.Regex
 
 
 /**
@@ -28,6 +29,29 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
+  }
+
+
+   def finalizeUltimately: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+     request
+       .session
+       .get("orderid") match {
+       case Some(id) =>
+         val idInt = id.toInt
+         orders.get(idInt) match {
+           case Some(order) =>
+             val args = request.body.asFormUrlEncoded
+             val List(firstName, surName): List[String] = List("fname", "lname")
+               .flatMap(key => args.get(key).headOption)
+             order.finalizeUltimately(firstName,surName) match {
+               case Success(message) =>
+                 Ok(s"Order finalized with full name ${message.mkString(" ")}")
+               case Failure(message) =>
+                 Ok(s"$message didn't match the required conditions")
+             }
+         }
+     }
+
   }
 
   def timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int): Action[AnyContent] =
@@ -75,12 +99,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
                   case (screening,(_,Success(list: List[Seat]))) =>
                     screening -> list
                 })))
-              case list=>
-                val string = list.flatMap {
+              case head::_=>
+                val string = head match {
                   case (screening,(_,Failure(list: List[Seat]))) =>
-                    s"There was a problem with screening $screening - following seats cannot be left (as long as they're between two reserved seats)"::list.map(_.toString)
+                    s"There was a problem with screening $screening - following seats cannot be left free (as long as they're between two reserved seats)"::list.map(_.toString)
                 }
-                getScreening(screeningId,string).apply(request)
+                getScreening(head._1.id,string).apply(request)
             }
           case None => getScreening(screeningId,List("error")).apply(request)
         }

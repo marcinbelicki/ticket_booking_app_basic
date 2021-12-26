@@ -1,6 +1,22 @@
-@(order: Map[Screening,List[Seat]])
+@(order: Map[Screening,List[Seat]])(implicit request: RequestHeader)
 
 @main("Order Finalizing") {
 
-    @order
+    @order.map {screeningAndList =>
+        @screeningAndList._1.movie.title <br>
+        @screeningAndList._1.room <br>
+        @screeningAndList._1.formattedDate <br>
+        @screeningAndList._2.map{seat =>
+            @seat <br>
+        }
+    }
+    <form action="/ultimateFinalization" method="POST">
+        @helper.CSRF.formField
+        <label for="fname">First name: </label>
+        <input type="text" id="fname" name="fname"><br><br>
+        <label for="lname">Last name: </label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
 }

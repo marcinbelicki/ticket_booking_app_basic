@@ -1,13 +1,13 @@
 @(screening: Screening,order: Option[Order],errorMessage: List[String] = Nil)
 
 @main("Reserve Screening") {
-    @errorMessage.map{message =>
-        @message <br>
+    @errorMessage.map{ message =>
+<div class="taken">@message</div>
     }
 
     @screening.movie.title <br>
     @screening.room <br>
-    @screening.date <br>
+    @screening.formattedDate <br>
 ---------------------------SCREEN---------------------------<br>
     @screening.seats.map{ row =>
         @row.seats.map {seat =>
