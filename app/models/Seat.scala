@@ -21,14 +21,14 @@ class Seat(i: Int, sR: Option[SeatRow] = None) {
   def setReserved(order: Order,id: Int): Unit = {
     status = Reserved(order,id)
   }
-  def setTaken(): Unit = {
-    status = Taken
-  }
+//  def setTaken(): Unit = {
+//    status = Taken
+//  }
 
 
   def setFree(): Unit = {
     status match {
-      case Taken | Reserved(_,_) => status = Available
+      case Taken(_,_) | Reserved(_,_) => status = Available
       case _ => ()
     }
   }

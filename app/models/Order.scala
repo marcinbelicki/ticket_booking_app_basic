@@ -47,17 +47,18 @@ class  Order(i: Int) extends Functions{
 
   def removeSeat(id: Int): Unit =seats-=id
 
-  def finalizeOrder: Map[Screening,(Boolean,OperationStatus[List[Seat]])] = {
+
+
+  def finalizeOrder: Map[Screening,(Boolean,OperationStatus[List[(Int,Seat)]])] = {
     seats
-      .values
       .toList
-      .groupBy(_.thisSeatRow.get.screening.get)
+      .groupBy(_._2.thisSeatRow.get.screening.get)
       .map{
         case screening -> seatList =>
           screening -> {
             screening.checkCondition(this) match {
               case Success(_) => (screening.plusFifteen,Success(seatList))
-              case Failure(list) => (screening.plusFifteen,Failure(list))
+              case Failure(list) => (screening.plusFifteen,Failure(list.zipWithIndex.map(a => (a._2,a._1))))
             }
           }
       }

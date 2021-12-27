@@ -46,6 +46,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
              order.finalizeUltimately(firstName,surName) match {
                case Success(message) =>
                  Ok(s"Order finalized with full name ${message.mkString(" ")}")
+                 Ok(args.toString)
                case Failure(message) =>
                  Ok(s"$message didn't match the required conditions")
              }
@@ -96,13 +97,13 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
             }.toList match {
               case Nil =>
                 Future(Ok(views.html.screeningFinalization(orderSeats.map{
-                  case (screening,(_,Success(list: List[Seat]))) =>
+                  case (screening,(_,Success(list: List[(Int,Seat)]))) =>
                     screening -> list
                 })))
               case head::_=>
                 val string = head match {
-                  case (screening,(_,Failure(list: List[Seat]))) =>
-                    s"There was a problem with screening $screening - following seats cannot be left free (as long as they're between two reserved seats)"::list.map(_.toString)
+                  case (screening,(_,Failure(list: List[(Int,Seat)]))) =>
+                    s"There was a problem with screening $screening - following seats cannot be left free (as long as they're between two reserved seats)"::list.map(_._2.toString)
                 }
                 getScreening(head._1.id,string).apply(request)
             }

@@ -27,7 +27,7 @@ class SeatRow(i: Int, s: Array[Seat], scr: Option[Screening] = None){
           }
 
 
-        case Taken =>
+        case Taken(_,_) =>
           Failure("Seat already taken")
         case Reserved(`order`,id) =>
           seat.setFree()
@@ -47,7 +47,7 @@ class SeatRow(i: Int, s: Array[Seat], scr: Option[Screening] = None){
       .sliding(3,1)
       .toList
       .collect {
-        case Array((_,Taken | Reserved(`order`,_)),(seat,Available),(_,Taken | Reserved(`order`,_))) => seat
+        case Array((_,Taken(_,_) | Reserved(`order`,_)),(seat,Available),(_,Taken(_,_) | Reserved(`order`,_))) => seat
       } match {
       case Nil => Success(Nil)
       case list => Failure(list)

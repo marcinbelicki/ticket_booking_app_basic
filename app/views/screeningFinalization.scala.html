@@ -1,16 +1,20 @@
-@(order: Map[Screening,List[Seat]])(implicit request: RequestHeader)
+@(order: Map[Screening,List[(Int,Seat)]])(implicit request: RequestHeader)
 
 @main("Order Finalizing") {
-
+<form action="/ultimateFinalization" method="POST">
     @order.map {screeningAndList =>
         @screeningAndList._1.movie.title <br>
         @screeningAndList._1.room <br>
         @screeningAndList._1.formattedDate <br>
         @screeningAndList._2.map{seat =>
-            @seat <br>
-        }
+            @seat._2 <select name="@seat._1">
+                    <option value ="adult">Adult (25 PLN)</option>
+                    <option value ="student">Student (18 PLN)</option>
+                    <option value ="child">Child (12.50 PLN) </option>
+                </select> <br>
+        }<br>
     }
-    <form action="/ultimateFinalization" method="POST">
+
         @helper.CSRF.formField
         <label for="fname">First name: </label>
         <input type="text" id="fname" name="fname"><br><br>
