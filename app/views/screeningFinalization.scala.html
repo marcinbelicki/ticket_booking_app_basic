@@ -1,6 +1,10 @@
-@(order: Map[Screening,List[(Int,Seat)]])(implicit request: RequestHeader)
+@(order: Map[Screening,List[(Int,Seat)]], errorMessage: List[String] = Nil)(implicit request: RequestHeader)
 
 @main("Order Finalizing") {
+
+@errorMessage.map{ message =>
+<div class="taken">@message</div>
+}
 <form action="/ultimateFinalization" method="POST">
     @order.map {screeningAndList =>
         @screeningAndList._1.movie.title <br>

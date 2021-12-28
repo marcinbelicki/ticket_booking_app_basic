@@ -1,16 +1,14 @@
 package controllers
 
-import memory.Memory.{addOrderToMemory, getScreeningsInInterval, groupAndSortByParameter1, orders, screenings}
-import memory.{Failure, OperationStatus, Success}
+import memory.Memory._
+import memory.{Failure, Success}
 import models.{Screening, Seat}
 import play.api.mvc._
 
-import java.net.URLDecoder
 import java.util.{Calendar, GregorianCalendar}
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.matching.Regex
 
 
 /**
@@ -27,12 +25,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
 
-  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
-  }
 
 
-   def finalizeUltimately: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+   def finalizeUltimately: Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
      request
        .session
        .get("orderid") match {
@@ -40,17 +35,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
          val idInt = id.toInt
          orders.get(idInt) match {
            case Some(order) =>
-             val args = request.body.asFormUrlEncoded
-             val List(firstName, surName): List[String] = List("fname", "lname")
-               .flatMap(key => args.get(key).headOption)
-             order.finalizeUltimately(firstName,surName) match {
+               order.finalizeUltimately(request.body.asFormUrlEncoded.get) match {
                case Success(message) =>
-                 Ok(s"Order finalized with full name ${message.mkString(" ")}")
-                 Ok(args.toString)
+                 Future(Ok(views.html.ultimateFinalization(message++order.groupToScreeningsWithExpirationDate)))
                case Failure(message) =>
-                 Ok(s"$message didn't match the required conditions")
+                 finalizeOrder(idInt,message).apply(request)
              }
+           case None => Future(Ok("Page not found"))
          }
+       case None => Future(Ok("Page not found"))
      }
 
   }
@@ -76,7 +69,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     }
 
   def getScreening(id: Int,error: List[String] = Nil): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    screenings.filter(_._2.plusFifteen).get(id) match {
+    screenings.get(id).filter(_.plusFifteen) match {
       case Some(screening) =>
 
         Ok(views.html.reservescreening(screening,request.session.get("orderid").map(_.toInt).flatMap(orders.get),error))
@@ -84,7 +77,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     }
   }
 
-  def finalizeOrder(screeningId: Int): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def finalizeOrder(screeningId: Int,error: List[String] = Nil): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     request.session.get("orderid") match {
       case Some(id) =>
         val idInt = id.toInt
@@ -96,10 +89,17 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
               case _ => false
             }.toList match {
               case Nil =>
-                Future(Ok(views.html.screeningFinalization(orderSeats.map{
-                  case (screening,(_,Success(list: List[(Int,Seat)]))) =>
-                    screening -> list
-                })))
+                orderSeats.toList match {
+                  case Nil =>
+                    getScreening(screeningId,List("No seats were reserved")).apply(request)
+                  case _ =>
+                    Future(Ok(views.html.screeningFinalization(orderSeats.map{
+                      case (screening,(_,Success(list: List[(Int,Seat)]))) =>
+                        screening -> list
+                    },error)))
+
+                }
+
               case head::_=>
                 val string = head match {
                   case (screening,(_,Failure(list: List[(Int,Seat)]))) =>
@@ -115,7 +115,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
 
   def reserveSeat(screeningId: Int, rowId: Int, seatId: Int ): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    screenings.filter(_._2.plusFifteen).get(screeningId) match {
+    screenings.get(screeningId).filter(_.plusFifteen) match {
       case Some(screening) =>
 
         request.session.get("orderid") match {

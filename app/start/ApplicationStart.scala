@@ -12,30 +12,24 @@ import scala.concurrent.Future
 class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle) {
 
 
-  addMovieToMemory("Joker",120)
-  addMovieToMemory("Friday",120)
-  addMovieToMemory("Fight Club",125)
+  addMovieToMemory("Joker",122)
+  addMovieToMemory("Friday the 13th",95)
+  addMovieToMemory("Fight Club",149)
 
   addRoomToMemory(None)
   addRoomToMemory(None)
   addRoomToMemory(None)
-  addRoomToMemory(None)
-  val a = new GregorianCalendar()
-  a.add(Calendar.YEAR,1)
-  rooms(0).addScreening(movies(0),a.getTime)
-  a.add(Calendar.MINUTE,5)
-  rooms(1).addScreening(movies(0),a.getTime)
-  a.add(Calendar.MINUTE,10)
-  rooms(2).addScreening(movies(0),a.getTime)
-  a.add(Calendar.MINUTE,10)
-  rooms(3).addScreening(movies(1),a.getTime)
-  a.add(Calendar.HOUR,10)
-  rooms(3).addScreening(movies(1),a.getTime)
-  rooms(1).addScreening(movies(1),new GregorianCalendar(2021,Calendar.DECEMBER,15,1,0x1).getTime)
-  rooms(1).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0x1).getTime)
-  rooms(0).addScreening(movies(2),new GregorianCalendar(2021,Calendar.DECEMBER,15,4,0).getTime)
-  rooms(2).addScreening(movies(0),new GregorianCalendar(2021,Calendar.DECEMBER,13,0,2).getTime)
+  val calendar = new GregorianCalendar()
+  calendar.add(Calendar.MINUTE,16)
 
+  rooms(0).addScreening(movies(0),calendar.getTime)
+  rooms(1).addScreening(movies(1),calendar.getTime)
+  rooms(2).addScreening(movies(2),calendar.getTime)
+  calendar.add(Calendar.MINUTE,151)
+
+  rooms(0).addScreening(movies(2),calendar.getTime)
+  rooms(1).addScreening(movies(0),calendar.getTime)
+  rooms(2).addScreening(movies(1),calendar.getTime)
  lifecycle.addStopHook { () =>
     Future.successful(())
   }

@@ -21,9 +21,9 @@ class Seat(i: Int, sR: Option[SeatRow] = None) {
   def setReserved(order: Order,id: Int): Unit = {
     status = Reserved(order,id)
   }
-//  def setTaken(): Unit = {
-//    status = Taken
-//  }
+  def setTaken(order: Order,price: TicketPrice): Unit = {
+    status = Taken(order,price)
+  }
 
 
   def setFree(): Unit = {

@@ -32,10 +32,4 @@ object Memory extends Functions {
       .toList
   }
 
-
-
-
-
-  println("a")
-
 }

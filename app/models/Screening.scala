@@ -6,9 +6,10 @@ import memory.{Failure, OperationStatus, Success}
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 import scala.math.Ordered.orderingToOrdered
+
 class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 
-  val (date,movie,room): (Date, Movie, Room)  = data
+  val (date, movie, room): (Date, Movie, Room) = data
 
   val id: Int = i
 
@@ -22,15 +23,15 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
   private val dateformat = new SimpleDateFormat("YYYY-MM-dd HH:mm")
 
   val formattedDate: String = dateformat.format(date)
+  def formattedEnd: String = dateformat.format(end)
+
   override def toString: String = {
-    s"Screening: $movie, $room, ${formattedDate}"
+    s"Screening: $movie, $room, $formattedDate"
   }
 
-
-
-  def  plusFifteen: Boolean = {
+  def plusFifteen: Boolean = {
     val cal: Calendar = Calendar.getInstance()
-    cal.add(Calendar.MINUTE,15)
+    cal.add(Calendar.MINUTE, 15)
     date >= cal.getTime
   }
 
@@ -51,7 +52,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
     removeThing(screenings)(id)
   }
 
-  def checkColision(startThat: Date,endThat: Date): Boolean = {
+  def checkColision(startThat: Date, endThat: Date): Boolean = {
     List(startThat,
       endThat,
       start,
@@ -60,7 +61,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
       .sortBy(_._1)
       .map(_._2)
     match {
-      case List(0,1,_*) | List(_,_,0,1) => true
+      case List(0, 1, _*) | List(_, _, 0, 1) => true
       case _ => false
     }
   }
@@ -76,7 +77,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
       case Some(row) =>
         orders.get(orderId) match {
           case Some(order) =>
-            row.reserveSeat(seatId,order)
+            row.reserveSeat(seatId, order)
           case _ =>
             Failure("Seat doesn't exist")
         }

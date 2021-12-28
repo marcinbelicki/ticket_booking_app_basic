@@ -24,11 +24,7 @@
         @o.seats.headOption.map { _ =>
             <a href="@routes.HomeController.finalizeOrder(screening.id)">Finalize your order</a><br>
         }
-        @o.seats.map {seat =>
-            <div class="seat">
-                <div class="number">@seat._2.thisSeatRow.map{row => @row.char}</div>
-                <div class="number">@seat._2.id</div>
-            </div><br>
+        @o.groupToScreenings.map {string => @string<br>
         }
     }
 }

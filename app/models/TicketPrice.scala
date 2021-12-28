@@ -28,4 +28,6 @@ case object Student extends TicketPrice(1800)
 
 case object Child extends TicketPrice(1250)
 
+case object Zero extends TicketPrice(0)
+
 
