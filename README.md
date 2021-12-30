@@ -2,10 +2,9 @@
 ### The goal is to build a seat reservation system for a multiplex.
 ## Business scenario (use case)
 ### 1. The user selects the day and the time when he/she would like to see the movie.
-For this functionality the GET request is used. User selects two dates with hours between (regardless of their order) he/she would like to see the movies in following format:__
-/timeinterval/firstdate/YYYY/MM/DD/hh/mm/lastdate/YYYY/MM/DD/hh/mm__
-The GET request is linked to a proper controller in [routes](/conf/routes) file.
-
+For this functionality the GET request is used. User selects two dates with time of a day between (regardless of their order) he/she would like to see the movies in following format:\
+/timeinterval/firstdate/YYYY/MM/DD/hh/mm/lastdate/YYYY/MM/DD/hh/mm\
+The GET request is linked to a proper controller in the [routes](/conf/routes) file.
 ### 2. The system lists movies available in the given time interval - title and screening times.
 ### 3. The user chooses a particular screening.
 ### 4. The system gives information regarding screening room and available seats.
