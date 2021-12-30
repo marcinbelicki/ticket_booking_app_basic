@@ -1,7 +1,7 @@
-Ticket booking app
-The goal is to build a seat reservation system for a multiplex.
-Business scenario (use case)
-1. The user selects the day and the time when he/she would like to see the movie.
+#Ticket booking app
+###The goal is to build a seat reservation system for a multiplex.
+##Business scenario (use case)
+###1. The user selects the day and the time when he/she would like to see the movie.
 2. The system lists movies available in the given time interval - title and screening
 times.
 3. The user chooses a particular screening.
