@@ -9,9 +9,20 @@ The GET request is linked to a proper [controller](/app/controllers/HomeControll
 The [controller](/app/controllers/HomeController.scala) mentioned in the previous section runs the function "timeInterval" which filters all of the screenings (localized in mutable Map in [Memory.scala](/app/memory/Memory.scala) file) and leaves only these that are between two selected dates.\
 The response is given in HTML format, and the screenigs are grouped by name of the movie and recursively subgrouped by year, month, day of the month, hour, until they reach minutes parameter (which contains hyperlink to a particular screening). For this functionality [screening.scala.html](/app/views/screenings.scala.html) view is used.
 ### 3. The user chooses a particular screening.
+The user can choose between every screening by clicking the hyperlink in the minutes parameter. (In the response described in the previous section)
 ### 4. The system gives information regarding screening room and available seats.
+This functionality uses GET request (linked in [routes](/conf/routes)) in the following format:
+/reserveScreening/id/\
+Where id is id of the particular screening. All of the screenings are stored in mutable Map, and each have a special numerical id.\
+The view of screening and available seats the system uses [reservescreening.scala.html](/app/views/reservescreening.scala.html). This view contain the matrix of seats - green are available, and red are reserved. As default each room has 10x10 seats matrix. Each seat is identified with 2 characters - first is letter of latin alphabet - which gives the information about the row, and an arabic numeral which gives the information regarding the location of the seat in the row.
 ### 5. The user chooses seats, and gives the name of the person doing the reservation (name and surname).
+The choosing of the seats is realised via GET request (linked in [routes](/conf/routes)) in the following format:\
+/reserveSeat/screening/row/seat\
+Where screening is id of chosen screening, row is id of chosen row, seat is id of a chosen seat in a row. After the user chooses a seat the system checks if his order exists in the memory, if it doesn't the system creates new order with special id which will be stored in cookie file of the user. If order already exists the system ads the seat to the user's order. This functionality uses 'reserveSeat' method stored in [controller](/app/controllers/HomeController.scala).\
+After the user chosen all of the seats he/she had wanted the user can go to 'finalizeOrder' ([screeningFinalization.scala.html](/app/views/screeningFinalization.scala.html) contains the view of this page) page which will give him/her the information about all of the seats he/she chosen and will ask him about what types of tickets does he/she want to buy. The user will also be asked fot his/her name and surname.\
 ### 6. The system gives back the total amount to pay and reservation expiration time.
+
+
 ## Assumptions
 ### 1. The system covers a single cinema with multiple rooms (multiplex).
 ### 2. Seats can be booked at latest 15 minutes before the screening begins.

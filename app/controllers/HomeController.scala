@@ -37,9 +37,16 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
            case Some(order) =>
                order.finalizeUltimately(request.body.asFormUrlEncoded.get) match {
                case Success(message) =>
-                 Future(Ok(views.html.ultimateFinalization(message++order.groupToScreeningsWithExpirationDate)))
+                 order.finalizeOrder
+                 .filter {
+                   case (_,(_,Failure(_)))  => true
+                   case _ => false
+                 }.toList match {
+                   case Nil => Future(Ok(views.html.ultimateFinalization(message++order.groupToScreeningsWithExpirationDate)))
+                   case (screening,_)::_ => finalizeOrder(screening.id).apply(request)
+                 }
                case Failure(message) =>
-                 finalizeOrder(idInt,message).apply(request)
+                 finalizeOrder(order.seats.head._2.thisSeatRow.get.screening.get.id,message).apply(request)
              }
            case None => Future(Ok("Page not found"))
          }
