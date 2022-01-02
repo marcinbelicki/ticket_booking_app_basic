@@ -23,7 +23,7 @@ After the user chosen all of the seats he/she had wanted the user can go to 'fin
 ### 6. The system gives back the total amount to pay and reservation expiration time.
 This functionality uses POST request (linked in [routes](/conf/routes)) in the following format:\
 /ultimateFinalization\
-The POST rewquest must contain fields "lname" and "fname" with information about name and surname of a person that finalizes the order and information about type of ticket for each of chosen seats.\
+The POST rewquest must contain fields "lname" and "fname" with information about name and surname of a person that finalizes the order and information about type of ticket for each of chosen seats.
 ## Assumptions
 ### 1. The system covers a single cinema with multiple rooms (multiplex).
 Each room object is stored in 'rooms' mutable Map.
@@ -37,19 +37,48 @@ Each of ticket prices described above has its own case object of the TicketPrice
 ## Business requirements
 ### 1. The data in the system should be valid, in particular:
 #### a. name and surname should each be at least three characters long, starting with a capital letter. The surname could consist of two parts separated with a single dash, in this case the second part should also start with a capital letter.
+For checking if the name and surname are valid the two Regexes and functions are used in file [Order](/app/models/Order.scala):
+```scala
+  private val fname: Regex = """\p{Lu}\p{L}{2,}""".r
+  private val lname: Regex = """\p{Lu}\p{L}{2,}([-]\p{Lu}\p{L}{2,})?""".r
+
+  private val fnameFunction: String => OperationStatus[String] = {
+    case fname@fname() => Success(fname)
+    case fname => Failure(fname)
+  }
+  private val lnameFunction: String => OperationStatus[String] = {
+    case lname@lname(_) => Success(lname)
+    case lname => Failure(lname)
+  }
+```
+
+
 #### b. reservation applies to at least one seat.
+
 ### 2. There cannot be a single place left over in a row between two already reserved places.
+
 ### 3. The system should properly handle Polish characters.
+
 ## Technical requirements
 ### 1. Application must be written in JVM language (Java, Scala, Kotlin etc.)
+
 ### 2. Operations must be exposed as REST services
+
 ### 3. No need to stick to any particular database - relational, NoSQL or in-memory database is fine
+
 ### 4. No need to build frontend
+
 ## Demo
 ### 1. Include shell script that will build and run your app.
+
 ### 2. The system should be automatically initialized with test data (at least three screening rooms, three movies and two screenings per room).
+
 ### 3. Include shell script that would run whole use case calling respective endpoints (using e.g. curl), we want to see requests and responses in action.
+
 ## Before submitting…
 ### 1. Make sure your solution contains a README file, which explains how to build and run your project and demo.
+
 ### 2. If there are some additional assumptions you’ve made, put them in README as well.
+
 ### 3. Prepare a single pull request containing whole source code (so that we can easily do a code review for you).
+
