@@ -21,13 +21,19 @@ The choosing of the seats is realised via GET request (linked in [routes](/conf/
 Where screening is id of chosen screening, row is id of chosen row, seat is id of a chosen seat in a row. After the user chooses a seat the system checks if his order exists in the memory, if it doesn't the system creates new order with special id which will be stored in cookie file of the user. If order already exists the system ads the seat to the user's order. This functionality uses 'reserveSeat' method stored in [controller](/app/controllers/HomeController.scala).\
 After the user chosen all of the seats he/she had wanted the user can go to 'finalizeOrder' ([screeningFinalization.scala.html](/app/views/screeningFinalization.scala.html) contains the view of this page) page which will give him/her the information about all of the seats he/she chosen and will ask him about what types of tickets does he/she want to buy. The user will also be asked fot his/her name and surname.\
 ### 6. The system gives back the total amount to pay and reservation expiration time.
-
-
+This functionality uses POST request (linked in [routes](/conf/routes)) in the following format:\
+/ultimateFinalization\
+The POST rewquest must contain fields "lname" and "fname" with information about name and surname of a person that finalizes the order and information about type of ticket for each of chosen seats.\
 ## Assumptions
 ### 1. The system covers a single cinema with multiple rooms (multiplex).
+Each room object is stored in 'rooms' mutable Map.
 ### 2. Seats can be booked at latest 15 minutes before the screening begins.
+The user can only see the screenings after 15 minutes from the current time. The seats can be only at least 15 minutes before the screening. However it is possible to finalize the order even after 15 minutes advance.
 ### 3. Screenings given in point 2. of the scenario should be sorted by title and screening time.
+How it was [previously](#2.-The-system-lists-movies-available-in-the-given-time-interval---title-and-screening-times.) describe GET request for screenings in time interval gives response in HTML format where all filtered screeenings not only grouped but also sorted (by the title in the first order and then by each meaningful parameter of the date.)
+
 ### 4. There are three ticket types: adult (25 PLN), student (18 PLN), child (12.50 PLN).
+Each of ticket prices described above has its own case object of the TicketPrice class. All of described abstractions are stored in [TicketPrice.scala](/app/models/TicketPrice.scala)
 ## Business requirements
 ### 1. The data in the system should be valid, in particular:
 #### a. name and surname should each be at least three characters long, starting with a capital letter. The surname could consist of two parts separated with a single dash, in this case the second part should also start with a capital letter.
