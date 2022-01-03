@@ -5,7 +5,6 @@ import memory.{Failure, OperationStatus, Success}
 
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
-import scala.math.Ordered.orderingToOrdered
 
 class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
 

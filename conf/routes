@@ -6,16 +6,16 @@
 # An example controller showing a sample home page
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                                                                                                   controllers.Assets.versioned(path="/public", file: Asset)
 
 
-GET     /reserveScreening/*id         controllers.HomeController.getScreening(id: Int)
+GET     /reserveScreening/*id                                                                                           controllers.HomeController.getScreening(id: Int)
 
 
-GET     /finalizeOrder/:screeningId         controllers.HomeController.finalizeOrder(screeningId: Int)
+GET     /finalizeOrder/:screeningId                                                                                     controllers.HomeController.finalizeOrder(screeningId: Int)
 
-GET     /reserveSeat/:screening/:row/:seat         controllers.HomeController.reserveSeat(screening: Int,row: Int,seat: Int)
+GET     /reserveSeat/:screening/:row/:seat                                                                              controllers.HomeController.reserveSeat(screening: Int,row: Int,seat: Int)
 
-POST    /ultimateFinalization           controllers.HomeController.finalizeUltimately
+POST    /ultimateFinalization                                                                                           controllers.HomeController.finalizeUltimately
 
-GET     /timeinterval/firstdate/:year1/:month1/:day1/:hour1/:minutes1/lastdate/:year2/:month2/:day2/:hour2/:minutes2     controllers.HomeController.timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int)
+GET     /timeinterval/firstdate/:year1/:month1/:day1/:hour1/:minutes1/lastdate/:year2/:month2/:day2/:hour2/:minutes2    controllers.HomeController.timeInterval(year1: Int,month1: Int,day1: Int,hour1: Int,minutes1: Int,year2: Int,month2: Int,day2: Int,hour2: Int,minutes2: Int)

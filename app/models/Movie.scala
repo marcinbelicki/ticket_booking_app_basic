@@ -1,11 +1,10 @@
 package models
 
 
-import memory.Memory.{movies, rooms, screenings}
+import memory.Memory.{movies, screenings}
 import memory.{Failure, OperationStatus, Success}
 
 import java.util.{Calendar, Date}
-import scala.collection.mutable
 
 
 class Movie(i: Int)(data: (String,Int)) extends Removeable {

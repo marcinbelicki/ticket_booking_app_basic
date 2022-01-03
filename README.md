@@ -74,8 +74,9 @@ The user's name and surname may contain Polish characters, as well as from other
 ## Technical requirements
 ### 1. Application must be written in JVM language (Java, Scala, Kotlin etc.)
 The application is written in Scala programming language and above that it's using Play Framework for handling the requests.
+This app requires java version 1.8 and sbt for building.
 ### 2. Operations must be exposed as REST services
-Each of the user case operations are exposed as REST services in the [routes](/conf/routes) file.
+Each of the use case operations are exposed as REST services in the [routes](/conf/routes) file.
 
 ### 3. No need to stick to any particular database - relational, NoSQL or in-memory database is fine
 The system uses in-memory four main mutable maps for storing data. Mutable maps are defined inside [Memory.scala](/app/memory/Memory.scala) file and all of them have propper adding methods.
@@ -92,7 +93,6 @@ Test data is initialized inside [ApplicationStart.scala](/app/start/ApplicationS
 
 ### 3. Include shell script that would run whole use case calling respective endpoints (using e.g. curl), we want to see requests and responses in action.
 The script is localized in [useCase.sh](/shellScripts/linux/useCase.sh). It uses the same [portNumber](/shellScripts/portNumber) file as [buildAndRun.sh](/shellScripts/linux/buildAndRun.sh).
-
 ## Before submitting…
 ### 1. Make sure your solution contains a README file, which explains how to build and run your project and demo.
 The project contains [README](README.md) file. In order to run the application execute following command:
@@ -103,7 +103,8 @@ To run use case demo execute following command:
 ```console
 cd shellScripts/linux; ./useCase.sh
 ```
+In order to open the app in a browser open this [link](http://localhost:8080/timeinterval/firstdate/2021/12/01/00/00/lastdate/2023/12/01/00/00) (it works for default 8080 port).
 ### 2. If there are some additional assumptions you’ve made, put them in README as well.
 The additional assumtion is that a person can finalized her/his order even after the fifteen minutes screening advance, but can reserve seats only before this time.
 ### 3. Prepare a single pull request containing whole source code (so that we can easily do a code review for you).
-
+The link to a pull request was sent via email.

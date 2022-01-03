@@ -1,6 +1,6 @@
 package start
 
-import memory.Memory.{addMovieToMemory, addRoomToMemory, movies, rooms, screenings}
+import memory.Memory.{addMovieToMemory, addRoomToMemory, movies, rooms}
 import play.api.inject.ApplicationLifecycle
 
 import java.util.{Calendar, GregorianCalendar}
