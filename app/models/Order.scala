@@ -2,6 +2,7 @@ package models
 
 import memory.{Failure, Functions, OperationStatus, Success}
 
+import org.apache.commons.text.StringEscapeUtils
 import scala.collection.mutable
 import scala.util.matching.Regex
 
@@ -60,6 +61,7 @@ class Order(i: Int) extends Functions {
   def finalizeUltimately(body: Map[String, Seq[String]]): OperationStatus[List[String]] = {
     List("fname", "lname")
       .flatMap(body.get(_).flatMap(_.headOption))
+      .map(StringEscapeUtils.unescapeJava)
       .zip(List(fnameFunction, lnameFunction))
       .map {
         case (a, b) => b(a)
@@ -92,7 +94,7 @@ class Order(i: Int) extends Functions {
             }
 
         }
-
+      case l@_::_ => Failure("Your last name or first name didn't match the criteria"::l.map(_.message))
       case _ =>
         Failure(List("Your last name or first name didn't match the criteria"))
     }
