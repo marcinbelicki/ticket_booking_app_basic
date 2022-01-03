@@ -13,7 +13,7 @@ hour=$(date +%H)
 minute=$(date +%M)
 
 
-secondDate=$(date -d "+1 days")
+secondDate=$(LANG=en_us_88591;date -d "+1 days")
 secondDay=$(date -d "$secondDate" +%d)
 secondMonth=$(date -d "$secondDate" +%m)
 secondYear=$(date -d "$secondDate" +%Y)
