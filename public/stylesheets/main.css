@@ -1,0 +1,62 @@
+:root {
+  --margin: 15px;
+}
+
+._0{
+    margin-left: calc(var(--margin)*0);
+}
+
+._1{
+    margin-left: calc(var(--margin)*1);
+}
+._2{
+    margin-left: calc(var(--margin)*2);
+}
+
+._3{
+    margin-left: calc(var(--margin)*3);
+}
+
+._4{
+    margin-left: calc(var(--margin)*4);
+}
+
+._5{
+    margin-left: calc(var(--margin)*5);
+}
+
+.seat{
+    float: left;
+    width: 36px;
+}
+
+.number {
+    float: left;
+    width: 13px;
+}
+
+
+.taken {
+    color: red;
+}
+
+.available {
+    color: green;
+}
+
+.reserved {
+    color: blue;
+}
+
+a {
+  color: #808080;
+}
+
+a:hover {
+  color: orange;
+}
+
+body {
+    background-color: black;
+    color: 	#808080;
+}

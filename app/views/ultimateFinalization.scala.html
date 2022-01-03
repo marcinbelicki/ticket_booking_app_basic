@@ -1,0 +1,8 @@
+@(message: List[String])
+
+@main("Order Finalized") {
+    @message.map { string =>
+        @string<br>
+
+    }
+}

@@ -1,0 +1,30 @@
+@(screening: Screening,order: Option[Order],errorMessage: List[String] = Nil)
+
+@main("Reserve Screening") {
+    @errorMessage.map{ message =>
+<div class="taken">@message</div>
+    }
+
+    @screening.movie.title <br>
+    @screening.room <br>
+    @screening.formattedDate <br>
+---------------------------SCREEN---------------------------<br>
+    @screening.seats.map{ row =>
+        @row.seats.map {seat =>
+            <a href="@routes.HomeController.reserveSeat(screening.id,row.id,seat.id)"  >
+                <div class="seat @seat.getStatus.toClass(order)">
+                    <div class="number">@row.char</div>
+                    <div class="number">@seat.id</div>
+                </div>
+            </a>
+        }<br>
+    }
+
+    @order.map { o =>
+        @o.seats.headOption.map { _ =>
+            <a href="@routes.HomeController.finalizeOrder(screening.id)">Finalize your order</a><br>
+        }
+        @o.groupToScreenings.map {string => @string<br>
+        }
+    }
+}

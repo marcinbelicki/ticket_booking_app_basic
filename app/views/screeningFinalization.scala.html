@@ -1,0 +1,30 @@
+@(order: Map[Screening,List[(Int,Seat)]], errorMessage: List[String] = Nil)(implicit request: RequestHeader)
+
+@main("Order Finalizing") {
+
+@errorMessage.map{ message =>
+<div class="taken">@message</div>
+}
+<form action="/ultimateFinalization" method="POST">
+    @order.map {screeningAndList =>
+        @screeningAndList._1.movie.title <br>
+        @screeningAndList._1.room <br>
+        @screeningAndList._1.formattedDate <br>
+        @screeningAndList._2.map{seat =>
+            @seat._2 <select name="@seat._1">
+                    <option value ="adult">Adult (25 PLN)</option>
+                    <option value ="student">Student (18 PLN)</option>
+                    <option value ="child">Child (12.50 PLN) </option>
+                </select> <br>
+        }<br>
+    }
+
+        @helper.CSRF.formField
+        <label for="fname">First name: </label>
+        <input type="text" id="fname" name="fname"><br><br>
+        <label for="lname">Last name: </label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+}
