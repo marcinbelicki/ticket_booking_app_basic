@@ -2,6 +2,7 @@ package models
 
 import memory.{Failure, Functions, OperationStatus, Success}
 
+import org.apache.commons.text.StringEscapeUtils
 import scala.collection.mutable
 import scala.util.matching.Regex
 
