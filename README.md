@@ -23,7 +23,7 @@ The response in browser should look as follows:\
 The choosing of the seats is realised via GET request (linked in [routes](/conf/routes)) in the following format:\
 /reserveSeat/screening/row/seat\
 Where screening is id of chosen screening, row is id of chosen row, seat is id of a chosen seat in a row. After the user chooses a seat the system checks if his order exists in the memory, if it doesn't the system creates new order with special id which will be stored in cookie file of the user. If order already exists the system ads the seat to the user's order. This functionality uses 'reserveSeat' method stored in [controller](/app/controllers/HomeController.scala).\
-After the user chosen all of the seats he/she had wanted the user can go to 'finalizeOrder' ([screeningFinalization.scala.html](/app/views/screeningFinalization.scala.html) contains the view of this page) page which will give him/her the information about all of the seats he/she chosen and will ask him about what types of tickets does he/she want to buy. The user will also be asked fot his/her name and surname.\
+After the user chosen all of the seats he/she had wanted the user can go to 'finalizeOrder' ([screeningFinalization.scala.html](/app/views/screeningFinalization.scala.html) contains the view of this page) page which will give him/her the information about all of the seats he/she chosen and will ask him about what types of tickets does he/she want to buy. The user will also be asked fot his/her name and surname.
 ### 6. The system gives back the total amount to pay and reservation expiration time.
 This functionality uses POST request (linked in [routes](/conf/routes)) in the following format:\
 /ultimateFinalization\
