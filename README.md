@@ -5,7 +5,8 @@
 For this functionality the GET request is used. User selects two dates with time of a day between (regardless of their order) he/she would like to see the movies in following format:\
 /timeinterval/firstdate/YYYY/MM/DD/hh/mm/lastdate/YYYY/MM/DD/hh/mm\
 The GET request is linked to a proper [controller](/app/controllers/HomeController.scala) in the [routes](/conf/routes) file.\
-![image](https://user-images.githubusercontent.com/75219854/147945614-ceef6191-13bd-4956-809d-d2acdbe70b4f.png)\
+The response in browser should look as follows:\
+![image](https://user-images.githubusercontent.com/75219854/147945614-ceef6191-13bd-4956-809d-d2acdbe70b4f.png)
 ### 2. The system lists movies available in the given time interval - title and screening times.
 The [controller](/app/controllers/HomeController.scala) mentioned in the previous section runs the function "timeInterval" which filters all of the screenings (localized in mutable Map in [Memory.scala](/app/memory/Memory.scala) file) and leaves only these that are between two selected dates.\
 The response is given in HTML format, and the screenigs are grouped by name of the movie and recursively subgrouped by year, month, day of the month, hour, until they reach minutes parameter (which contains hyperlink to a particular screening). For this functionality [screening.scala.html](/app/views/screenings.scala.html) view is used.
@@ -15,7 +16,9 @@ The user can choose between every screening by clicking the hyperlink in the min
 This functionality uses GET request (linked in [routes](/conf/routes)) in the following format:
 /reserveScreening/id/\
 Where id is id of the particular screening. All of the screenings are stored in mutable Map, and each have a special numerical id.\
-The view of screening and available seats the system uses [reservescreening.scala.html](/app/views/reservescreening.scala.html). This view contain the matrix of seats - green are available, and red are reserved. As default each room has 10x10 seats matrix. Each seat is identified with 2 characters - first is letter of latin alphabet - which gives the information about the row, and an arabic numeral which gives the information regarding the location of the seat in the row.
+The view of screening and available seats the system uses [reservescreening.scala.html](/app/views/reservescreening.scala.html). This view contain the matrix of seats - green are available, and red are reserved. As default each room has 10x10 seats matrix. Each seat is identified with 2 characters - first is letter of latin alphabet - which gives the information about the row, and an arabic numeral which gives the information regarding the location of the seat in the row.\
+The response in browser should look as follows:\
+![image](https://user-images.githubusercontent.com/75219854/147945927-9b683820-ba2e-41db-ac0c-7b25e3a67c9a.png)
 ### 5. The user chooses seats, and gives the name of the person doing the reservation (name and surname).
 The choosing of the seats is realised via GET request (linked in [routes](/conf/routes)) in the following format:\
 /reserveSeat/screening/row/seat\
