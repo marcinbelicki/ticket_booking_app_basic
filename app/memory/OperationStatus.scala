@@ -9,7 +9,6 @@ abstract class OperationStatus[A](mess: A) {
   }
 }
 
-
 case class Success[A]( override val message: A) extends OperationStatus[A](message)
 
 case class Failure[A]( override val message: A) extends OperationStatus[A](message)

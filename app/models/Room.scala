@@ -6,7 +6,7 @@ import memory.{Failure, OperationStatus, Success}
 
 import java.util.Date
 
-class Room (i: Int)(name: Option[String])  extends Removeable {
+class Room(i: Int)(name: Option[String]) extends Removeable {
 
   private val id = i
 
@@ -18,9 +18,7 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
   }
 
 
-
-
-  private val seats: Array[SeatRow] = Range(0,10).toArray.map(new SeatRow(_,Range(0,10).toArray.map(new Seat(_)).clone()))
+  private val seats: Array[SeatRow] = Range(0, 10).toArray.map(new SeatRow(_, Range(0, 10).toArray.map(new Seat(_)).clone()))
 
 
   private val TheRoom = this
@@ -32,21 +30,21 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
   def addScreening(movie: Movie, date: Date): OperationStatus[Any] = {
     val end = movie.movieEnds(date)
     screenings.filter {
-      case _ -> screening if screening.room == TheRoom & !screening.checkColision(date,end) => true
+      case _ -> screening if screening.room == TheRoom & !screening.checkColision(date, end) => true
       case _ => false
     }
       .values
       .toList
     match {
       case Nil =>
-        addScreeningToMemory(date,movie,TheRoom).toAny
+        addScreeningToMemory(date, movie, TheRoom).toAny
       case a =>
         Failure(s"Screening has collision with:\n${a.mkString("\n")}")
     }
   }
 
-  def remove: OperationStatus[String] ={
-    val messageFromScreenings = screenings.filter{
+  def remove: OperationStatus[String] = {
+    val messageFromScreenings = screenings.filter {
       case _ -> screening if screening.room == TheRoom => true
       case _ => false
     }.values
@@ -56,7 +54,7 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
     removeThing(rooms)(id) match {
       case Success(message) =>
         Success(s"$message\n$messageFromScreenings")
-      case f @ Failure(_) => f
+      case f@Failure(_) => f
     }
   }
 

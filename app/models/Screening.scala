@@ -23,6 +23,7 @@ class Screening(i: Int)(data: (Date, Movie, Room)) extends Removeable {
   private val dateformat = new SimpleDateFormat("YYYY-MM-dd HH:mm")
 
   val formattedDate: String = dateformat.format(date)
+
   def formattedEnd: String = dateformat.format(end)
 
   override def toString: String = {

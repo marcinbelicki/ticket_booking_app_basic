@@ -2,7 +2,6 @@ package models
 
 import memory.{Failure, Functions, OperationStatus, Success}
 
-import org.apache.commons.text.StringEscapeUtils
 import scala.collection.mutable
 import scala.util.matching.Regex
 
@@ -39,7 +38,7 @@ class Order(i: Int) extends Functions {
     groupToScreeningsList
       .flatMap {
         case (screening: Screening, list: List[Seat]) =>
-         screening.movie.toString ::
+          screening.movie.toString ::
             screening.room.toString ::
             screening.formattedDate ::
             list.map(_.toString)
@@ -94,7 +93,7 @@ class Order(i: Int) extends Functions {
             }
 
         }
-      case l@_::_ => Failure("Your last name or first name didn't match the criteria"::l.map(_.message))
+      case l@_ :: _ => Failure("Your last name or first name didn't match the criteria" :: l.map(_.message))
       case _ =>
         Failure(List("Your last name or first name didn't match the criteria"))
     }

@@ -2,20 +2,19 @@ package models
 
 trait SeatStatus {
   override def toString: String = this match {
-    case Taken(_,_) => "taken"
+    case Taken(_, _) => "taken"
     case Available => "available"
   }
 
-  def toClass(order: Option[Order]): String = (this,order) match {
-    case (Taken(_,_),_) => "taken"
-    case (Available,_) => "available"
-    case (Reserved(a,_),Some(o)) if a == o => "reserved"
+  def toClass(order: Option[Order]): String = (this, order) match {
+    case (Taken(_, _), _) => "taken"
+    case (Available, _) => "available"
+    case (Reserved(a, _), Some(o)) if a == o => "reserved"
     case _ => "taken"
 
   }
 
 }
-
 
 
 case class Taken(order: Order, ticketPrice: TicketPrice) extends SeatStatus
