@@ -35,6 +35,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
          val idInt = id.toInt
          orders.get(idInt) match {
            case Some(order) =>
+
                order.finalizeUltimately(request.body.asFormUrlEncoded.get) match {
                case Success(message) =>
                  order.finalizeOrder

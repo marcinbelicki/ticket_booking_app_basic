@@ -12,15 +12,15 @@ import scala.concurrent.Future
 class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle) {
 
 
-  addMovieToMemory("Joker",122)
-  addMovieToMemory("Friday the 13th",95)
-  addMovieToMemory("Fight Club",149)
+  addMovieToMemory("Joker",122)           // title: Joker, duration: 122 minutes
+  addMovieToMemory("Friday the 13th",95)  // title: Friday the 13th, duration: 95 minutes
+  addMovieToMemory("Fight Club",149)      // title: Fight Club, duration: 149minutes
 
   addRoomToMemory(None)
   addRoomToMemory(None)
   addRoomToMemory(None)
   val calendar = new GregorianCalendar()
-  calendar.add(Calendar.MINUTE,16)
+  calendar.add(Calendar.MINUTE,20)
 
   rooms(0).addScreening(movies(0),calendar.getTime)
   rooms(1).addScreening(movies(1),calendar.getTime)

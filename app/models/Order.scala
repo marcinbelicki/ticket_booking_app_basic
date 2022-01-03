@@ -38,7 +38,7 @@ class Order(i: Int) extends Functions {
     groupToScreeningsList
       .flatMap {
         case (screening: Screening, list: List[Seat]) =>
-          screening.movie.toString ::
+         screening.movie.toString ::
             screening.room.toString ::
             screening.formattedDate ::
             list.map(_.toString)
@@ -67,7 +67,7 @@ class Order(i: Int) extends Functions {
       case l@List(Success(firstName), Success(surName)) =>
         status = Finalized(firstName, surName)
         seats match {
-          case mutable.Map.empty => Failure(List("No seats reserved"))
+          case m if m.isEmpty => Failure(List("No seats reserved"))
           case _ =>
             seats.foldLeft((Nil.asInstanceOf[List[Seat]], Zero.asInstanceOf[TicketPrice])) {
               case ((seatsWithout, price), seatId -> seat) =>

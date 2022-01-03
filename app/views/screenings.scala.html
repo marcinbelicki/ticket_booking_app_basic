@@ -9,16 +9,6 @@
 <div class="_5">
     <a href="">minute (screening hyperlink)</a>
 </div>
-
-@list.map{ a =>
-    <div class="_@a._1">
-        @if(a._3.isDefined){
-            <a href="/reserveScreening/@a._3.get/">@a._2</a>
-        } else {
-            @a._2
-        }
-    </div>
-
-}
-
+    @list.map{a=><div class="_@a._1">@if(a._3.isDefined){<a href="@routes.HomeController.getScreening(a._3.get)">@a._2</a>} else {@a._2}</div>
+    }
 }

@@ -29,9 +29,6 @@ class Room (i: Int)(name: Option[String])  extends Removeable {
     seats.map(_.copy(screening))
   }
 
-
-
-
   def addScreening(movie: Movie, date: Date): OperationStatus[Any] = {
     val end = movie.movieEnds(date)
     screenings.filter {

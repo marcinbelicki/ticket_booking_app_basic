@@ -51,34 +51,59 @@ For checking if the name and surname are valid the two Regexes and functions are
     case lname => Failure(lname)
   }
 ```
-
-
 #### b. reservation applies to at least one seat.
-
+In the finalization of the order the system checks if there are any seats chosen. If there are none the order cannot be finalized and the system responds with error message.
 ### 2. There cannot be a single place left over in a row between two already reserved places.
-
+The system checks this condition for each screening in the order with checkCondition(order: Order) method in [Screening.scala](/app/models/Screening.scala) which then maps checkCondition(order: Order) method for each seat row inside the room of screenig. checkConditio(order: Order) for seatRow class is localized inside [SeatRow.scala](/app/models/SeatRow.scala) file and gives result of class OperationStatus, with list of seats that should be reserved for order to be valid. It is coded as follows:
+```scala
+ def checkCondition(order: Order): OperationStatus[List[Seat]] = {
+    seats
+      .map(seat => (seat,seat.getStatus))
+      .sliding(3,1)
+      .toList
+      .collect {
+        case Array((_,Taken(_,_) | Reserved(`order`,_)),(seat,Available),(_,Taken(_,_) | Reserved(`order`,_))) => seat
+      } match {
+      case Nil => Success(Nil)
+      case list => Failure(list)
+    }
+  }
+```
 ### 3. The system should properly handle Polish characters.
-
+The user's name and surname may contain Polish characters, as well as from other alphabets. The validation in the system will work just fine thanks to propper Regexes inside [Order](/app/models/Order.scala) file.
 ## Technical requirements
 ### 1. Application must be written in JVM language (Java, Scala, Kotlin etc.)
-
+The application is written in Scala programming language and above that it's using Play Framework for handling the requests.
 ### 2. Operations must be exposed as REST services
+Each of the user case operations are exposed as REST services in the [routes](/conf/routes) file.
 
 ### 3. No need to stick to any particular database - relational, NoSQL or in-memory database is fine
+The system uses in-memory four main mutable maps for storing data. Mutable maps are defined inside [Memory.scala](/app/memory/Memory.scala) file and all of them have propper adding methods.
 
 ### 4. No need to build frontend
+The system contains minimal HTML and CSS frontend, mostly for ease of testing (espacially if data is more graphical - for example the matrix of seats).
 
 ## Demo
 ### 1. Include shell script that will build and run your app.
+The script is localized in [buildAndRun.sh](/shellScripts/linux/buildAndRun.sh). The number of used port can be set by changing content of [portNumber](/shellScripts/portNumber).
 
 ### 2. The system should be automatically initialized with test data (at least three screening rooms, three movies and two screenings per room).
+Test data is initialized inside [ApplicationStart.scala](/app/start/ApplicationStart.scala) file.
 
 ### 3. Include shell script that would run whole use case calling respective endpoints (using e.g. curl), we want to see requests and responses in action.
+The script is localized in [useCase.sh](/shellScripts/linux/useCase.sh). It uses the same [portNumber](/shellScripts/portNumber) file as [buildAndRun.sh](/shellScripts/linux/buildAndRun.sh).
 
 ## Before submitting…
 ### 1. Make sure your solution contains a README file, which explains how to build and run your project and demo.
-
+The project contains [README](README.md) file. In order to run the application execute following command:
+```console
+cd shellScripts/linux; ./buildAndRun.sh
+```
+To run use case demo execute following command:
+```console
+cd shellScripts/linux; ./useCase.sh
+```
 ### 2. If there are some additional assumptions you’ve made, put them in README as well.
-
+The additional assumtion is that a person can finalized her/his order even after the fifteen minutes screening advance, but can reserve seats only before this time.
 ### 3. Prepare a single pull request containing whole source code (so that we can easily do a code review for you).
 
