@@ -4,7 +4,7 @@
 ### 1. The user selects the day and the time when he/she would like to see the movie.
 For this functionality the GET request is used. User selects two dates with time of a day between (regardless of their order) he/she would like to see the movies in following format:\
 /timeinterval/firstdate/YYYY/MM/DD/hh/mm/lastdate/YYYY/MM/DD/hh/mm\
-The GET request is linked to a proper [controller](/app/controllers/HomeController.scala) in the [routes](/conf/routes) file.
+The GET request is linked to a proper [controller](/app/controllers/HomeController.scala) in the [routes](/conf/routes) file.\
 ![image](https://user-images.githubusercontent.com/75219854/147945614-ceef6191-13bd-4956-809d-d2acdbe70b4f.png)\
 ### 2. The system lists movies available in the given time interval - title and screening times.
 The [controller](/app/controllers/HomeController.scala) mentioned in the previous section runs the function "timeInterval" which filters all of the screenings (localized in mutable Map in [Memory.scala](/app/memory/Memory.scala) file) and leaves only these that are between two selected dates.\
